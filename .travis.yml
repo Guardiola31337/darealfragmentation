@@ -13,4 +13,4 @@ android:
     - extra-android-support
 
 script:
-  - ./gradlew checkstyle build
+  - ./gradlew clean checkstyle build
