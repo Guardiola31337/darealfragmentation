@@ -23,47 +23,59 @@ import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.util.SparseArray;
 
 public class SensorsService extends Service {
-  private SensorManager sensorManager;
-  private SensorReceiver sensorReceiver;
+    private static final int FIVE_SAMPLES_PER_SECOND = 200000;
+    private SensorManager sensorManager;
+    private SensorReceiver sensorReceiver;
+    private SparseArray<Store> stores;
 
-  @Override public void onCreate() {
-    super.onCreate();
-    sensorReceiver = new SensorReceiver(new OnSensorChanged() {
-      @Override public void onChanged(String sample, int sensorType) {
-        saveValues(sample, sensorType);
-      }
-    });
-    sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-    sensorManager.registerListener(sensorReceiver,
-        sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), 200000);
-    sensorManager.registerListener(sensorReceiver,
-        sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE), 200000);
-  }
-
-  @Override public int onStartCommand(Intent intent, int flags, int startId) {
-    return START_STICKY;
-  }
-
-  @Nullable @Override public IBinder onBind(Intent intent) {
-    return null;
-  }
-
-  @Override public void onDestroy() {
-    super.onDestroy();
-    sensorManager.unregisterListener(sensorReceiver);
-  }
-
-  private void saveValues(String values, int sensorType) {
-    if (sensorType == Sensor.TYPE_ACCELEROMETER) {
-      FileSaver.saveStringToFile(values,
-          getExternalFilesDir(null).toString() + Constants.ACCEL_FIVE_HZ_LOG_FILE);
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        initStores();
+        sensorReceiver = new SensorReceiver(new OnSensorChanged() {
+            @Override
+            public void onChanged(String sample, int sensorType) {
+                saveValues(sample, sensorType);
+            }
+        });
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        sensorManager.registerListener(sensorReceiver, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                FIVE_SAMPLES_PER_SECOND);
+        sensorManager.registerListener(sensorReceiver, sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE),
+                FIVE_SAMPLES_PER_SECOND);
     }
 
-    if (sensorType == Sensor.TYPE_GYROSCOPE) {
-      FileSaver.saveStringToFile(values,
-          getExternalFilesDir(null).toString() + Constants.GYRO_FIVE_HZ_LOG_FILE);
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return START_STICKY;
     }
-  }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+
+    @Override
+    public void onDestroy() {
+        sensorManager.unregisterListener(sensorReceiver);
+        stores.get(Sensor.TYPE_ACCELEROMETER).end();
+        stores.get(Sensor.TYPE_GYROSCOPE).end();
+        super.onDestroy();
+    }
+
+    private void initStores() {
+        stores = new SparseArray<>();
+        stores.put(Sensor.TYPE_ACCELEROMETER,
+                new Store(Constants.ACCEL, getExternalFilesDir(null).toString() + Constants.ACCEL_FIVE_HZ_LOG_FILE));
+        stores.put(Sensor.TYPE_GYROSCOPE,
+                new Store(Constants.GYROSCOPE, getExternalFilesDir(null).toString() + Constants.GYRO_FIVE_HZ_LOG_FILE));
+    }
+
+    private void saveValues(String values, int sensorType) {
+        stores.get(sensorType).save(values);
+    }
 }

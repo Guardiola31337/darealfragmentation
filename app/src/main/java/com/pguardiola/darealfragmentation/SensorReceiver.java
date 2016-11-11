@@ -19,64 +19,44 @@ package com.pguardiola.darealfragmentation;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
-import android.util.Log;
-import java.sql.Timestamp;
-import java.util.Date;
 
 public class SensorReceiver implements SensorEventListener {
-  private final OnSensorChanged sensorChanged;
+    private static final String SENSOR_ROW = "%d;%d;%f;%f;%f\n";
+    private final OnSensorChanged sensorChanged;
 
-  public SensorReceiver(OnSensorChanged sensorChanged) {
-    this.sensorChanged = sensorChanged;
-  }
-
-  @Override public void onSensorChanged(SensorEvent event) {
-    int sensorType = event.sensor.getType();
-
-    if (sensorType == Sensor.TYPE_ACCELEROMETER) {
-      onSampleReceived(event, sensorType);
+    public SensorReceiver(OnSensorChanged sensorChanged) {
+        this.sensorChanged = sensorChanged;
     }
 
-    if (sensorType == Sensor.TYPE_GYROSCOPE) {
-      onSampleReceived(event, sensorType);
-    }
-  }
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        int sensorType = event.sensor.getType();
 
-  @Override public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        if (sensorType == Sensor.TYPE_ACCELEROMETER) {
+            onSampleReceived(event, sensorType);
+        }
 
-  }
-
-  private void onSampleReceived(SensorEvent event, int sensorType) {
-    float[] values = event.values;
-
-    float x = values[0];
-    float y = values[1];
-    float z = values[2];
-
-    long sensorTimestampInMillis =
-        (new Date()).getTime() + (event.timestamp - System.nanoTime()) / 1000000L;
-    long currentTimeInMillis = System.currentTimeMillis();
-
-    String sensorValues = "";
-    if (sensorType == Sensor.TYPE_ACCELEROMETER) {
-      sensorValues = Constants.ACCEL_RECEIVED_AT;
+        if (sensorType == Sensor.TYPE_GYROSCOPE) {
+            onSampleReceived(event, sensorType);
+        }
     }
 
-    if (sensorType == Sensor.TYPE_GYROSCOPE) {
-      sensorValues = Constants.GYRO_RECEIVED_AT;
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
     }
 
-    sensorValues += new Timestamp(currentTimeInMillis)
-        + " Value (x: "
-        + x
-        + ", y: "
-        + y
-        + ", z: "
-        + z
-        + ") Timestamp: "
-        + new Timestamp(sensorTimestampInMillis)
-        + Constants.NEW_LINE;
-    Log.d(Constants.TAG, sensorValues);
-    sensorChanged.onChanged(sensorValues, sensorType);
-  }
+    private void onSampleReceived(SensorEvent event, int sensorType) {
+        float[] values = event.values;
+
+        float x = values[0];
+        float y = values[1];
+        float z = values[2];
+
+        long sensorRawTimestampInNanos = event.timestamp;
+        long currentTimeInMillis = System.currentTimeMillis();
+
+        String sensorValues = String.format(SENSOR_ROW, currentTimeInMillis, sensorRawTimestampInNanos, x, y, z);
+        sensorChanged.onChanged(sensorValues, sensorType);
+    }
 }
