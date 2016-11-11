@@ -22,43 +22,42 @@ import android.hardware.SensorEventListener;
 import java.util.Locale;
 
 public class SensorReceiver implements SensorEventListener {
-    private static final String SENSOR_ROW = "%d;%d;%f;%f;%f\n";
-    private final OnSensorChanged sensorChanged;
+  private static final String SENSOR_ROW = "%d;%d;%f;%f;%f\n";
+  private final OnSensorChanged sensorChanged;
 
-    public SensorReceiver(OnSensorChanged sensorChanged) {
-        this.sensorChanged = sensorChanged;
+  public SensorReceiver(OnSensorChanged sensorChanged) {
+    this.sensorChanged = sensorChanged;
+  }
+
+  @Override public void onSensorChanged(SensorEvent event) {
+    int sensorType = event.sensor.getType();
+
+    if (sensorType == Sensor.TYPE_ACCELEROMETER) {
+      onSampleReceived(event, sensorType);
     }
 
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        int sensorType = event.sensor.getType();
-
-        if (sensorType == Sensor.TYPE_ACCELEROMETER) {
-            onSampleReceived(event, sensorType);
-        }
-
-        if (sensorType == Sensor.TYPE_GYROSCOPE) {
-            onSampleReceived(event, sensorType);
-        }
+    if (sensorType == Sensor.TYPE_GYROSCOPE) {
+      onSampleReceived(event, sensorType);
     }
+  }
 
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+  @Override public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
-    }
+  }
 
-    private void onSampleReceived(SensorEvent event, int sensorType) {
-        float[] values = event.values;
+  private void onSampleReceived(SensorEvent event, int sensorType) {
+    float[] values = event.values;
 
-        float x = values[0];
-        float y = values[1];
-        float z = values[2];
+    float x = values[0];
+    float y = values[1];
+    float z = values[2];
 
-        long sensorRawTimestampInNanos = event.timestamp;
-        long currentTimeInMillis = System.currentTimeMillis();
+    long sensorRawTimestampInNanos = event.timestamp;
+    long currentTimeInMillis = System.currentTimeMillis();
 
-        String sensorValues =
-                String.format(Locale.US, SENSOR_ROW, currentTimeInMillis, sensorRawTimestampInNanos, x, y, z);
-        sensorChanged.onChanged(sensorValues, sensorType);
-    }
+    String sensorValues =
+        String.format(Locale.US, SENSOR_ROW, currentTimeInMillis, sensorRawTimestampInNanos, x, y,
+            z);
+    sensorChanged.onChanged(sensorValues, sensorType);
+  }
 }

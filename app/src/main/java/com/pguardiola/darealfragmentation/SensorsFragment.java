@@ -88,7 +88,8 @@ public class SensorsFragment extends Fragment {
     sensorRx = new SensorRx(sensorManager);
     subscriber = sensorRx.obtainSubscriber();
     Sensor accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-    publisher = sensorRx.obtainPublisher(accelerometer, Sensor.TYPE_ACCELEROMETER, FIVE_SAMPLES_PER_SECOND);
+    publisher =
+        sensorRx.obtainPublisher(accelerometer, Sensor.TYPE_ACCELEROMETER, FIVE_SAMPLES_PER_SECOND);
   }
 
   private void startSensorsRx() {
