@@ -19,6 +19,7 @@ package com.pguardiola.darealfragmentation;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
+import java.util.Locale;
 
 public class SensorReceiver implements SensorEventListener {
     private static final String SENSOR_ROW = "%d;%d;%f;%f;%f\n";
@@ -56,7 +57,8 @@ public class SensorReceiver implements SensorEventListener {
         long sensorRawTimestampInNanos = event.timestamp;
         long currentTimeInMillis = System.currentTimeMillis();
 
-        String sensorValues = String.format(SENSOR_ROW, currentTimeInMillis, sensorRawTimestampInNanos, x, y, z);
+        String sensorValues =
+                String.format(Locale.US, SENSOR_ROW, currentTimeInMillis, sensorRawTimestampInNanos, x, y, z);
         sensorChanged.onChanged(sensorValues, sensorType);
     }
 }
