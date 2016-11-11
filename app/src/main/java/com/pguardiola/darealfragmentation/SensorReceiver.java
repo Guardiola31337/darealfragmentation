@@ -19,11 +19,10 @@ package com.pguardiola.darealfragmentation;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
-import android.util.Log;
-import java.sql.Timestamp;
-import java.util.Date;
+import java.util.Locale;
 
 public class SensorReceiver implements SensorEventListener {
+  private static final String SENSOR_ROW = "%d;%d;%f;%f;%f\n";
   private final OnSensorChanged sensorChanged;
 
   public SensorReceiver(OnSensorChanged sensorChanged) {
@@ -53,30 +52,12 @@ public class SensorReceiver implements SensorEventListener {
     float y = values[1];
     float z = values[2];
 
-    long sensorTimestampInMillis =
-        (new Date()).getTime() + (event.timestamp - System.nanoTime()) / 1000000L;
+    long sensorRawTimestampInNanos = event.timestamp;
     long currentTimeInMillis = System.currentTimeMillis();
 
-    String sensorValues = "";
-    if (sensorType == Sensor.TYPE_ACCELEROMETER) {
-      sensorValues = Constants.ACCEL_RECEIVED_AT;
-    }
-
-    if (sensorType == Sensor.TYPE_GYROSCOPE) {
-      sensorValues = Constants.GYRO_RECEIVED_AT;
-    }
-
-    sensorValues += new Timestamp(currentTimeInMillis)
-        + " Value (x: "
-        + x
-        + ", y: "
-        + y
-        + ", z: "
-        + z
-        + ") Timestamp: "
-        + new Timestamp(sensorTimestampInMillis)
-        + Constants.NEW_LINE;
-    Log.d(Constants.TAG, sensorValues);
+    String sensorValues =
+        String.format(Locale.US, SENSOR_ROW, currentTimeInMillis, sensorRawTimestampInNanos, x, y,
+            z);
     sensorChanged.onChanged(sensorValues, sensorType);
   }
 }

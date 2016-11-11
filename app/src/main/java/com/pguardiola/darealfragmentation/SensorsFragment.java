@@ -28,9 +28,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import io.reactivex.Flowable;
 import io.reactivex.subscribers.DisposableSubscriber;
-import java.util.Calendar;
 
 public class SensorsFragment extends Fragment {
+  private static final int FIVE_SAMPLES_PER_SECOND = 200000;
   private Context context;
   private SensorRx sensorRx;
   private DisposableSubscriber<String> subscriber;
@@ -74,24 +74,12 @@ public class SensorsFragment extends Fragment {
   private void startSensorsService() {
     Intent intent = new Intent(context, SensorsService.class);
     context.startService(intent);
-    FileSaver.saveStringToFile(Constants.ACCEL + Constants.SENSOR_SET_AT + String.format(
-        Constants.DATE_AND_TIME_FORMATTING, Calendar.getInstance()) + Constants.NEW_LINE,
-        getActivity().getExternalFilesDir(null).toString() + Constants.ACCEL_FIVE_HZ_LOG_FILE);
-    FileSaver.saveStringToFile(Constants.GYROSCOPE + Constants.SENSOR_SET_AT + String.format(
-        Constants.DATE_AND_TIME_FORMATTING, Calendar.getInstance()) + Constants.NEW_LINE,
-        getActivity().getExternalFilesDir(null).toString() + Constants.GYRO_FIVE_HZ_LOG_FILE);
   }
 
   private void stopSensorsService() {
     if (context != null) {
       Intent intent = new Intent(context, SensorsService.class);
       context.stopService(intent);
-      FileSaver.saveStringToFile(Constants.ACCEL + Constants.SENSOR_STOPPED_AT + String.format(
-          Constants.DATE_AND_TIME_FORMATTING, Calendar.getInstance()) + Constants.NEW_LINE,
-          getActivity().getExternalFilesDir(null).toString() + Constants.ACCEL_FIVE_HZ_LOG_FILE);
-      FileSaver.saveStringToFile(Constants.GYROSCOPE + Constants.SENSOR_STOPPED_AT + String.format(
-          Constants.DATE_AND_TIME_FORMATTING, Calendar.getInstance()) + Constants.NEW_LINE,
-          getActivity().getExternalFilesDir(null).toString() + Constants.GYRO_FIVE_HZ_LOG_FILE);
     }
   }
 
@@ -100,7 +88,8 @@ public class SensorsFragment extends Fragment {
     sensorRx = new SensorRx(sensorManager);
     subscriber = sensorRx.obtainSubscriber();
     Sensor accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-    publisher = sensorRx.obtainPublisher(accelerometer, Sensor.TYPE_ACCELEROMETER, 200000);
+    publisher =
+        sensorRx.obtainPublisher(accelerometer, Sensor.TYPE_ACCELEROMETER, FIVE_SAMPLES_PER_SECOND);
   }
 
   private void startSensorsRx() {
