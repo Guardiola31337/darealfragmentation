@@ -51,6 +51,7 @@
     </receiver>
 
     <service android:name=".SensorsService"></service>
+    <service android:name=".SensorsBatchingService"></service>
 
   </application>
 

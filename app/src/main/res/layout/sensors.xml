@@ -52,12 +52,30 @@
       android:text="Stop sensors"/>
 
   <Button
-      android:id="@+id/startSensorsRx"
+      android:id="@+id/startSensorsBatching"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_alignParentLeft="true"
       android:layout_alignParentStart="true"
       android:layout_below="@+id/stopSensors"
+      android:text="Start sensors batching"/>
+
+  <Button
+      android:id="@+id/stopSensorsBatching"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_alignParentLeft="true"
+      android:layout_alignParentStart="true"
+      android:layout_below="@+id/startSensorsBatching"
+      android:text="Stop sensors batching"/>
+
+  <Button
+      android:id="@+id/startSensorsRx"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_alignParentLeft="true"
+      android:layout_alignParentStart="true"
+      android:layout_below="@+id/stopSensorsBatching"
       android:text="Start Sensors Rx"/>
 
   <Button
