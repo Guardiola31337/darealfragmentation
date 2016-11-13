@@ -28,23 +28,39 @@ public class Constants {
   public static final String IDLE = "Idle";
   public static final String NEW_LINE = "\n";
   public static final String INEXACT_THREE_MIN_LOG_FILE = "inexact_three_min_log.txt";
+  public static final String INEXACT_THREE_MIN_RECEIPT_LOG_FILE =
+      "inexact_three_min_receipt_log.txt";
   public static final String INEXACT_THIRTY_MIN_LOG_FILE = "inexact_thirty_min_log.txt";
+  public static final String INEXACT_THIRTY_MIN_RECEIPT_LOG_FILE =
+      "inexact_thirty_min_receipt_log.txt";
   public static final String INEXACT_THREE_MIN_IDLE_LOG_FILE = "inexact_three_min_idle_log.txt";
+  public static final String INEXACT_THREE_MIN_IDLE_RECEIPT_LOG_FILE =
+      "inexact_three_min_idle_receipt_log.txt";
   public static final String INEXACT_THIRTY_MIN_IDLE_LOG_FILE = "inexact_thirty_min_idle_log.txt";
+  public static final String INEXACT_THIRTY_MIN_IDLE_RECEIPT_LOG_FILE =
+      "inexact_thirty_min_idle_receipt_log.txt";
   public static final String NETWORK_CHANGES_LOG_FILE = "network_changes_log.txt";
   public static final String DA_REAL_FRAGMENTATION_PREFS = "da_real_fragmentation_prefs";
   public static final String IS_RECEIVING_NETWORK_CHANGES = "isReceivingNetworkChanges";
   public static final String NETWORK_CHANGES_SET_AT = "Network changes Set at ";
   public static final String NETWORK_CHANGES_CANCELED_AT = "Network changes Canceled at ";
   public static final String NETWORK_CHANGE_RECEIVED_AT = "Network change received at ";
+  public static final String SENSOR_HEADER =
+      "CURRENT_TIMESTAMP;SENSOR_RAW_TIMESTAMP_NANOS;VALUE_X;VALUE_Y;VALUE_Z\n";
   public static final String ACCEL = "Accelerometer ";
   public static final String GYROSCOPE = "Gyroscope ";
   public static final String SENSOR_SET_AT = "Sensor Set at ";
   public static final String ACCEL_FIVE_HZ_LOG_FILE = "accel_five_hz_log.txt";
+  public static final String ACCEL_FIVE_HZ_SAMPLES_LOG_FILE = "accel_five_hz_log_%1$tF_%1$tT.txt";
   public static final String GYRO_FIVE_HZ_LOG_FILE = "gyro_five_hz_log.txt";
+  public static final String GYRO_FIVE_HZ_SAMPLES_LOG_FILE = "gyro_five_hz_log_%1$tF_%1$tT.txt";
   public static final String SENSOR_STOPPED_AT = "Sensor Stopped at ";
   public static final String ACCEL_RECEIVED_AT = "Accelerometer sample received at ";
   public static final String GYRO_RECEIVED_AT = "Gyroscope sample received at ";
   public static final String ACCEL_BATCHING_SIX_MS_LOG_FILE = "accel_batching_six_ms_log.txt";
+  public static final String ACCEL_BATCHING_SIX_MS_SAMPLES_LOG_FILE =
+      "accel_batching_six_ms_log_%1$tF_%1$tT.txt";
   public static final String GYRO_BATCHING_SIX_MS_LOG_FILE = "gyro_batching_six_ms_log.txt";
+  public static final String GYRO_BATCHING_SIX_MS_SAMPLES_LOG_FILE =
+      "gyro_batching_six_ms_log_%1$tF_%1$tT.txt";
 }

@@ -26,8 +26,17 @@ import android.os.Build;
 import android.os.SystemClock;
 import android.util.Log;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 public class AlarmReceiver extends BroadcastReceiver {
+  private static final String ROW_TEMPLATE = "%d\n";
+  private final Map<String, String> fileLogsNames;
+
+  public AlarmReceiver() {
+    fileLogsNames = initFileNames();
+  }
 
   @TargetApi(Build.VERSION_CODES.M)
   public static void startInexactThreeMinIntervalIdle(Context context) {
@@ -74,32 +83,21 @@ public class AlarmReceiver extends BroadcastReceiver {
   }
 
   @Override public void onReceive(Context context, Intent intent) {
+    saveReceivedLog(context, intent);
     if (Constants.THREE.equals(intent.getAction())) {
       Log.d(Constants.TAG,
           Constants.THREE + Constants.SEPARATOR + Constants.ALARM_RECEIVED_AT + String.format(
               Constants.DATE_AND_TIME_FORMATTING, Calendar.getInstance()));
-      FileSaver.saveStringToFile(
-          Constants.ALARM_RECEIVED_AT + String.format(Constants.DATE_AND_TIME_FORMATTING,
-              Calendar.getInstance()) + Constants.NEW_LINE,
-          context.getExternalFilesDir(null).toString() + Constants.INEXACT_THREE_MIN_LOG_FILE);
     } else if (Constants.THIRTY.equals(intent.getAction())) {
       Log.d(Constants.TAG,
           Constants.THIRTY + Constants.SEPARATOR + Constants.ALARM_RECEIVED_AT + String.format(
               Constants.DATE_AND_TIME_FORMATTING, Calendar.getInstance()));
-      FileSaver.saveStringToFile(
-          Constants.ALARM_RECEIVED_AT + String.format(Constants.DATE_AND_TIME_FORMATTING,
-              Calendar.getInstance()) + Constants.NEW_LINE,
-          context.getExternalFilesDir(null).toString() + Constants.INEXACT_THIRTY_MIN_LOG_FILE);
     } else if ((Constants.THREE + Constants.IDLE).equals(intent.getAction())) {
       Log.d(Constants.TAG, Constants.THREE
           + Constants.SEPARATOR
           + Constants.IDLE
           + Constants.ALARM_RECEIVED_AT
           + String.format(Constants.DATE_AND_TIME_FORMATTING, Calendar.getInstance()));
-      FileSaver.saveStringToFile(
-          Constants.ALARM_RECEIVED_AT + String.format(Constants.DATE_AND_TIME_FORMATTING,
-              Calendar.getInstance()) + Constants.NEW_LINE,
-          context.getExternalFilesDir(null).toString() + Constants.INEXACT_THREE_MIN_IDLE_LOG_FILE);
       startInexactThreeMinIntervalIdle(context);
     } else if ((Constants.THIRTY + Constants.IDLE).equals(intent.getAction())) {
       Log.d(Constants.TAG, Constants.THIRTY
@@ -107,12 +105,27 @@ public class AlarmReceiver extends BroadcastReceiver {
           + Constants.IDLE
           + Constants.ALARM_RECEIVED_AT
           + String.format(Constants.DATE_AND_TIME_FORMATTING, Calendar.getInstance()));
-      FileSaver.saveStringToFile(
-          Constants.ALARM_RECEIVED_AT + String.format(Constants.DATE_AND_TIME_FORMATTING,
-              Calendar.getInstance()) + Constants.NEW_LINE,
-          context.getExternalFilesDir(null).toString()
-              + Constants.INEXACT_THIRTY_MIN_IDLE_LOG_FILE);
       startInexactThirtyMinIntervalIdle(context);
+    }
+  }
+
+  private Map<String, String> initFileNames() {
+    Map<String, String> fileLogsNames = new HashMap<>();
+    fileLogsNames.put(Constants.THREE, Constants.INEXACT_THREE_MIN_RECEIPT_LOG_FILE);
+    fileLogsNames.put(Constants.THIRTY, Constants.INEXACT_THIRTY_MIN_RECEIPT_LOG_FILE);
+    fileLogsNames.put(Constants.THREE + Constants.IDLE,
+        Constants.INEXACT_THREE_MIN_IDLE_RECEIPT_LOG_FILE);
+    fileLogsNames.put(Constants.THIRTY + Constants.IDLE,
+        Constants.INEXACT_THIRTY_MIN_IDLE_RECEIPT_LOG_FILE);
+    return fileLogsNames;
+  }
+
+  private void saveReceivedLog(Context context, Intent intent) {
+    String receiptTimestamp = String.format(Locale.US, ROW_TEMPLATE, System.currentTimeMillis());
+    String filePath = context.getExternalFilesDir(null).toString();
+    String fileName = fileLogsNames.get(intent.getAction());
+    if (fileName != null) {
+      FileSaver.saveStringToFile(receiptTimestamp, filePath + fileName);
     }
   }
 }
