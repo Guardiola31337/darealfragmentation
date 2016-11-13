@@ -51,6 +51,18 @@ public class SensorsFragment extends Fragment {
       }
     });
 
+    view.findViewById(R.id.startSensorsBatching).setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
+        startSensorsBatchingService();
+      }
+    });
+
+    view.findViewById(R.id.stopSensorsBatching).setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
+        stopSensorsBatchingService();
+      }
+    });
+
     view.findViewById(R.id.startSensorsRx).setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
         startSensorsRx();
@@ -79,6 +91,18 @@ public class SensorsFragment extends Fragment {
   private void stopSensorsService() {
     if (context != null) {
       Intent intent = new Intent(context, SensorsService.class);
+      context.stopService(intent);
+    }
+  }
+
+  private void startSensorsBatchingService() {
+    Intent intent = new Intent(context, SensorsBatchingService.class);
+    context.startService(intent);
+  }
+
+  private void stopSensorsBatchingService() {
+    if (context != null) {
+      Intent intent = new Intent(context, SensorsBatchingService.class);
       context.stopService(intent);
     }
   }
