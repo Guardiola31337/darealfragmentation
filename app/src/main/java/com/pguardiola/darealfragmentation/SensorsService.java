@@ -24,6 +24,7 @@ import android.hardware.SensorManager;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.SparseArray;
+import java.util.Calendar;
 
 public class SensorsService extends Service {
   private static final int FIVE_SAMPLES_PER_SECOND = 200000;
@@ -63,10 +64,20 @@ public class SensorsService extends Service {
 
   private void initStores() {
     stores = new SparseArray<>();
-    stores.put(Sensor.TYPE_ACCELEROMETER, new Store(Constants.ACCEL,
-        getExternalFilesDir(null).toString() + Constants.ACCEL_FIVE_HZ_LOG_FILE));
-    stores.put(Sensor.TYPE_GYROSCOPE, new Store(Constants.GYROSCOPE,
-        getExternalFilesDir(null).toString() + Constants.GYRO_FIVE_HZ_LOG_FILE));
+    String externalPath = getExternalFilesDir(null).toString();
+    Calendar current = Calendar.getInstance();
+    String accelSamplesStorePath =
+        externalPath + String.format(Constants.ACCEL_FIVE_HZ_SAMPLES_LOG_FILE, current);
+    String accelLogsStorePath = externalPath + Constants.ACCEL_FIVE_HZ_LOG_FILE;
+    stores.put(Sensor.TYPE_ACCELEROMETER,
+        new Store(Constants.ACCEL, Constants.SENSOR_HEADER, accelSamplesStorePath,
+            accelLogsStorePath));
+    String gyroSamplesStorePath =
+        externalPath + String.format(Constants.GYRO_FIVE_HZ_SAMPLES_LOG_FILE, current);
+    String gyroLogsStorePath = externalPath + Constants.GYRO_FIVE_HZ_LOG_FILE;
+    stores.put(Sensor.TYPE_GYROSCOPE,
+        new Store(Constants.GYROSCOPE, Constants.SENSOR_HEADER, gyroSamplesStorePath,
+            gyroLogsStorePath));
   }
 
   private void saveValues(String values, int sensorType) {
