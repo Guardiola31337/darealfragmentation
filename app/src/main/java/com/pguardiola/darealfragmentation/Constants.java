@@ -57,10 +57,12 @@ public class Constants {
   public static final String SENSOR_STOPPED_AT = "Sensor Stopped at ";
   public static final String ACCEL_RECEIVED_AT = "Accelerometer sample received at ";
   public static final String GYRO_RECEIVED_AT = "Gyroscope sample received at ";
-  public static final String ACCEL_BATCHING_SIX_MS_LOG_FILE = "accel_batching_six_ms_log.txt";
+  public static final String ACCEL_BATCHING_SIX_MS_LOG_FILE =
+      "accel_batching_six_ms_activity_log.txt";
   public static final String ACCEL_BATCHING_SIX_MS_SAMPLES_LOG_FILE =
       "accel_batching_six_ms_log_%1$tF_%1$tT.txt";
-  public static final String GYRO_BATCHING_SIX_MS_LOG_FILE = "gyro_batching_six_ms_log.txt";
+  public static final String GYRO_BATCHING_SIX_MS_LOG_FILE =
+      "gyro_batching_six_ms_activity_log.txt";
   public static final String GYRO_BATCHING_SIX_MS_SAMPLES_LOG_FILE =
       "gyro_batching_six_ms_log_%1$tF_%1$tT.txt";
 }
