@@ -187,31 +187,41 @@ public class AlarmsFragment extends Fragment {
   }
 
   private void cancelAll() {
-    manager.cancel(pendingIntentThree);
-    manager.cancel(pendingIntentThirty);
-    manager.cancel(pendingIntentThreeIdle);
-    manager.cancel(pendingIntentThirtyIdle);
     Log.d(Constants.TAG,
         Constants.ALARM_CANCELED_AT + String.format(Constants.DATE_AND_TIME_FORMATTING,
             Calendar.getInstance()));
-    FileSaver.saveStringToFile(
-        Constants.ALARM_CANCELED_AT + String.format(Constants.DATE_AND_TIME_FORMATTING,
-            Calendar.getInstance()) + Constants.NEW_LINE,
-        getActivity().getExternalFilesDir(null).toString() + Constants.INEXACT_THREE_MIN_LOG_FILE);
-    FileSaver.saveStringToFile(
-        Constants.ALARM_CANCELED_AT + String.format(Constants.DATE_AND_TIME_FORMATTING,
-            Calendar.getInstance()) + Constants.NEW_LINE,
-        getActivity().getExternalFilesDir(null).toString() + Constants.INEXACT_THIRTY_MIN_LOG_FILE);
-    FileSaver.saveStringToFile(
-        Constants.ALARM_CANCELED_AT + String.format(Constants.DATE_AND_TIME_FORMATTING,
-            Calendar.getInstance()) + Constants.NEW_LINE,
-        getActivity().getExternalFilesDir(null).toString()
-            + Constants.INEXACT_THREE_MIN_IDLE_LOG_FILE);
-    FileSaver.saveStringToFile(
-        Constants.ALARM_CANCELED_AT + String.format(Constants.DATE_AND_TIME_FORMATTING,
-            Calendar.getInstance()) + Constants.NEW_LINE,
-        getActivity().getExternalFilesDir(null).toString()
-            + Constants.INEXACT_THIRTY_MIN_IDLE_LOG_FILE);
+    if (pendingIntentThree != null) {
+      manager.cancel(pendingIntentThree);
+      FileSaver.saveStringToFile(
+          Constants.ALARM_CANCELED_AT + String.format(Constants.DATE_AND_TIME_FORMATTING,
+              Calendar.getInstance()) + Constants.NEW_LINE,
+          getActivity().getExternalFilesDir(null).toString()
+              + Constants.INEXACT_THREE_MIN_LOG_FILE);
+    }
+    if (pendingIntentThirty != null) {
+      manager.cancel(pendingIntentThirty);
+      FileSaver.saveStringToFile(
+          Constants.ALARM_CANCELED_AT + String.format(Constants.DATE_AND_TIME_FORMATTING,
+              Calendar.getInstance()) + Constants.NEW_LINE,
+          getActivity().getExternalFilesDir(null).toString()
+              + Constants.INEXACT_THIRTY_MIN_LOG_FILE);
+    }
+    if (pendingIntentThreeIdle != null) {
+      manager.cancel(pendingIntentThreeIdle);
+      FileSaver.saveStringToFile(
+          Constants.ALARM_CANCELED_AT + String.format(Constants.DATE_AND_TIME_FORMATTING,
+              Calendar.getInstance()) + Constants.NEW_LINE,
+          getActivity().getExternalFilesDir(null).toString()
+              + Constants.INEXACT_THREE_MIN_IDLE_LOG_FILE);
+    }
+    if (pendingIntentThirtyIdle != null) {
+      manager.cancel(pendingIntentThirtyIdle);
+      FileSaver.saveStringToFile(
+          Constants.ALARM_CANCELED_AT + String.format(Constants.DATE_AND_TIME_FORMATTING,
+              Calendar.getInstance()) + Constants.NEW_LINE,
+          getActivity().getExternalFilesDir(null).toString()
+              + Constants.INEXACT_THIRTY_MIN_IDLE_LOG_FILE);
+    }
   }
 
   private void startNetworkChanges() {
