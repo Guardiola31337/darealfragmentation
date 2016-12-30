@@ -16,6 +16,15 @@ Reviewing how to deal with the different versions of [Alarms in Android](https:/
  
 Apart from that, it explains how we have solved such fragmentation issues in order to develop an app that works properly in as many devices as possible.
 
+This code was created to support the following posts:
+
+* [Alarms](http://pguardiola.com/blog/darealfragmentation-alarms/) 
+* [Doze](http://pguardiola.com/blog/darealfragmentation-doze/)
+* [Sensors](http://pguardiola.com/blog/darealfragmentation-sensors/)
+
+You can also check the [slides](https://speakerdeck.com/guardiola31337/da-real-fragmentation-explained-codemotion-2016) of the [talk](http://2016.codemotion.es/agenda.html#5732408326356992/84644004), that my friend [Raúl](https://github.com/rromane) and I gave at [Codemotion Spain 2016](http://2016.codemotion.es/).
+
+
 License
 -------
 
